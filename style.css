@@ -1,336 +1,1281 @@
-/* === ORVANI EYEWEAR - FINAL & CONSOLIDATED SCRIPT === */
+/* === ORVANI EYEWEAR FINAL STYLESHEET === */
 
-document.addEventListener('DOMContentLoaded', () => {
+/* 1. GENERAL & ROOT STYLES
+-------------------------------------------------- */
+:root {
+    --main-bg-color: #000000;
+    --text-color: #ffffff;
+    --accent-bg-color: #1a1a1a;
+    --border-color: #333333;
+    --accent-color: #f7ff00;
+}
 
-    // --- 1. INTERACTIVE HEADER LOGIC ---
-    const header = document.querySelector('.site-header');
-    const logoLink = document.querySelector('.logo a');
-    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-    const mobileNavOverlay = document.querySelector('.mobile-nav-overlay');
+html {
+    /* NEW: This creates the smooth scrolling effect */
+    scroll-behavior: smooth;
+}
 
-    if (logoLink) {
-        const logoText = logoLink.textContent;
-        // Check if the logo hasn't already been processed to avoid re-running
-        if (logoLink.childElementCount === 0) {
-            logoLink.innerHTML = '';
-            for (let i = 0; i < logoText.length; i++) {
-                const charSpan = document.createElement('span');
-                charSpan.textContent = logoText[i];
-                logoLink.appendChild(charSpan);
-            }
-        }
+body {
+    background-color: var(--main-bg-color);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.grain-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39sbGxpaWpcXFzQ0NDV1dWNjY2WlpbMzMyvr6+ZmZlnZ2ej0jB3AAAAEklEQVR42mP4Q4GEgAWIMKQgdwYIAEB29GU2fE/vAAAAAElFTkSuQmCC');
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 9999;
+    animation: grain 8s steps(10) infinite;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0%); }
+  70% { transform: translate(0%, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.egoist-font {
+    font-family: 'Rubik Mono One', sans-serif;
+}
+
+section {
+    padding: 6rem 5%;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 4rem;
+    letter-spacing: 2px;
+}
+
+
+/* 2. PRELOADER
+-------------------------------------------------- */
+#main-content.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(3) translateX(-15%); 
+    transition: transform 2s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 1.5s ease-out;
+}
+
+#main-content.visible {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1) translateX(0);
+}
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #000;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 1.2s ease-in-out;
+}
+
+#initial-prompt {
+    text-align: center;
+    transition: opacity 0.3s ease;
+}
+
+.blinking-cursor {
+    width: 3px;
+    height: 1.5rem;
+    background-color: #fff;
+    animation: blink 1s steps(2, start) infinite;
+    margin: 0 auto 1rem;
+}
+
+.enter-text {
+    color: #fff;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 0.8rem;
+}
+
+#typewriter-container {
+    font-family: 'Rubik Mono One', sans-serif;
+    font-size: 8vmax;
+    color: #fff;
+    text-transform: uppercase;
+    position: relative;
+}
+
+#typewriter-container #typewriter-text {
+    display: inline-block;
+    vertical-align: bottom;
+    width: 0ch;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 1.5s steps(6, end) forwards, blink 1s steps(2, start) infinite;
+    border-right: 5px solid white;
+}
+
+#preloader .hidden {
+    display: none;
+}
+
+@keyframes blink {
+    to { border-right-color: transparent; background-color: transparent; }
+}
+
+@keyframes typing {
+    from { width: 0ch; }
+    to { width: 6ch; }
+}
+
+
+/* 3. HEADER & TICKER
+-------------------------------------------------- */
+/* === 2. UPGRADED INTERACTIVE HEADER === */
+
+/* === 2. FINAL INTERACTIVE HEADER & TICKER === */
+
+/* The new container that holds both elements */
+.top-bar-container {
+    position: fixed; /* Keep the whole unit fixed to the top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* This ensures vertical centering */
+    width: 100%;
+    padding: 2rem 5%;
+    background-color: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    /* Smooth transitions for all animations */
+    transition: padding 0.4s ease, background-color 0.4s ease, backdrop-filter 0.4s ease;
+}
+
+/* Scrolled state */
+.site-header.scrolled {
+    padding: 1rem 5%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Logo Styling & Scatter Effect */
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+.logo a {
+    color: inherit;
+    text-decoration: none;
+}
+.logo span {
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.logo:hover span:nth-child(1) { transform: translate(-2px, -3px) rotate(-5deg); }
+.logo:hover span:nth-child(2) { transform: translate(2px, 2px) rotate(3deg); }
+.logo:hover span:nth-child(3) { transform: translate(-3px, 1px) rotate(5deg); }
+.logo:hover span:nth-child(4) { transform: translate(3px, -2px) rotate(-2deg); }
+.logo:hover span:nth-child(5) { transform: translate(-1px, 3px) rotate(4deg); }
+.logo:hover span:nth-child(6) { transform: translate(2px, -1px) rotate(-3deg); }
+
+
+/* Navigation & Expand on Hover Effect */
+.site-header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2.5rem;
+    margin: 0;
+}
+.site-header nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.5rem 0;
+    position: relative;
+    display: inline-block;
+    /* Add 'transform' to the transition for the expand effect */
+    transition: color 0.3s, transform 0.3s ease;
+}
+
+/* The expanding effect on hover */
+.site-header nav a:hover {
+    transform: scale(1.1);
+}
+
+/* The animated underline */
+.site-header nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--accent-color);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.site-header nav a:hover::after,
+.site-header nav a.active-nav::after {
+    transform: scaleX(1);
+}
+.site-header nav a:hover,
+.site-header nav a.active-nav {
+    color: var(--accent-color);
+}
+
+/* Ticker Styling - now simpler and correctly positioned */
+.scrolling-ticker {
+    /* No longer needs position: fixed or top properties */
+    background-color: var(--text-color);
+    color: var(--main-bg-color);
+    padding: 0.5rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.ticker-content {
+    display: inline-block;
+    padding-left: 100%;
+    animation: ticker-scroll 30s linear infinite;
+}
+.ticker-content span {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0 2rem;
+}
+@keyframes ticker-scroll {
+    from { transform: translateX(0%); }
+    to { transform: translateX(-100%); }
+}
+
+/* 4. PAGE SECTIONS
+-------------------------------------------------- */
+/* Hero Section */
+#hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.hero-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    filter: grayscale(100%) contrast(1.2);
+    opacity: 0.6;
+    z-index: -1;
+}
+
+.hero-content h1 {
+    font-size: 6rem;
+    margin: 0;
+    letter-spacing: 5px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+/* Campaign Section */
+#campaign {
+    padding: 6rem 0;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    background-color: var(--main-bg-color);
+    transition: background-color 0.8s ease-in-out;
+}
+
+.campaign-gallery {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    margin-bottom: 2rem;
+}
+
+.campaign-card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 45vh;
+    max-width: 90%;
+    aspect-ratio: 1 / 1;
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+    transition: transform 0.6s ease, opacity 0.6s ease, z-index 0s 0.3s;
+    border: 2px solid #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.campaign-card.active {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    z-index: 10;
+    transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.campaign-card.next {
+    transform: translate(-40%, -50%) scale(0.9);
+    opacity: 0.7;
+    z-index: 9;
+}
+
+.campaign-card.prev {
+    transform: translate(-60%, -50%) scale(0.9);
+    opacity: 0.7;
+    z-index: 9;
+}
+
+
+.campaign-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.campaign-controls {
+    position: relative;
+    z-index: 20;
+}
+
+.campaign-headline {
+    font-family: 'Rubik Mono One', sans-serif;
+    font-size: 5rem;
+    color: #fff;
+    margin: 0;
+    text-transform: uppercase;
+    transition: opacity 0.5s;
+}
+
+.campaign-nav {
+    margin-top: 1rem;
+}
+
+#prev-btn, #next-btn {
+    background: transparent;
+    border: 2px solid #fff;
+    color: #fff;
+    font-size: 1.5rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin: 0 0.5rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#prev-btn:hover, #next-btn:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Collection Section */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.product-card {
+    background-color: var(--accent-bg-color);
+    border: 1px solid var(--border-color);
+    text-align: center;
+    padding: 1.5rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.05);
+}
+
+.product-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.product-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.product-image .hover-image {
+    opacity: 0;
+}
+
+.product-card:hover .product-image .hover-image {
+    opacity: 1;
+}
+
+.product-card:hover .product-image .static-image {
+    opacity: 0;
+}
+
+.product-card h3 {
+    font-size: 1.5rem;
+    margin: 1rem 0 0.5rem;
+}
+
+.price {
+    font-size: 1.1rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+}
+
+.quick-look-btn {
+    background: transparent;
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
+    padding: 0.8rem 1.5rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.quick-look-btn:hover {
+    background-color: var(--text-color);
+    color: var(--main-bg-color);
+}
+
+
+/* Lookbook Section */
+.parallax {
+    background-color: #100010;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.parallax::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+}
+
+.lookbook-content {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 3rem;
+    border: 1px solid var(--border-color);
+    text-align: center;
+    max-width: 600px;
+    z-index: 2;
+}
+
+.lookbook-content h2 {
+    font-size: 2rem;
+}
+
+/* About Section */
+#about {
+    background-color: var(--accent-bg-color);
+}
+
+.about-content {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.about-content p {
+    flex: 1;
+    line-height: 1.8;
+}
+
+.about-image {
+    flex: 1;
+    max-width: 450px;
+    border: 1px solid var(--border-color);
+}
+
+/* Signature Banner Section */
+#signature-banner {
+    position: relative;
+    padding: 8rem 5%;
+    background-color: #000;
+    overflow: hidden;
+    text-align: center;
+}
+
+.banner-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    filter: grayscale(100%) brightness(0.4);
+}
+
+.banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 2;
+}
+
+.banner-content {
+    position: relative;
+    z-index: 3;
+    padding: 2rem;
+}
+
+.banner-content h2 {
+    font-size: 4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin: 0 0 1rem 0;
+    color: #fff;
+}
+
+.banner-content p {
+    font-size: 1.2rem;
+    color: #ccc;
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.banner-cta {
+    display: inline-block;
+    background: transparent;
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
+    padding: 1rem 2.5rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.banner-cta:hover {
+    background-color: var(--accent-color);
+    color: var(--main-bg-color);
+    border-color: var(--accent-color);
+}
+
+/* Signature Banner Frame Animation */
+.line {
+    position: absolute;
+    background-color: var(--accent-color);
+    opacity: 0.7;
+    /* Changed 1.2s to 2.5s for a slower, smoother animation */
+    transition: transform 2.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.line.top, .line.bottom {
+    width: 100%;
+    height: 2px;
+    transform: scaleX(0);
+}
+
+.line.left, .line.right {
+    width: 2px;
+    height: 100%;
+    transform: scaleY(0);
+}
+
+.line.top { top: 0; left: 0; transform-origin: left; }
+.line.bottom { bottom: 0; right: 0; transform-origin: right; }
+.line.left { bottom: 0; left: 0; transform-origin: bottom; }
+.line.right { top: 0; right: 0; transform-origin: top; }
+
+.reveal-animation-container.animate-lines .line {
+    transform: scaleX(1) scaleY(1);
+}
+
+/* === Thank You Section === */
+
+#thank-you {
+    background-color: var(--accent-bg-color);
+    color: var(--text-color);
+    padding: 6rem 5%;
+    text-align: center;
+}
+
+.thank-you-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.thank-you-content h2 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    letter-spacing: 3px;
+}
+
+.thank-you-content h3 {
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+}
+
+.thank-you-content .orvani-logo {
+    font-family: 'Rubik Mono One', sans-serif;
+    font-size: 5rem;
+    margin-bottom: 2rem;
+    /* This creates the outlined text effect */
+    -webkit-text-stroke: 2px var(--text-color);
+    color: transparent;
+}
+
+.thank-you-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #ddd;
+}
+
+/* 5. FOOTER
+-------------------------------------------------- */
+footer {
+    padding: 4rem 5% 2rem;
+    background-color: #000;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-cta {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-color);
+    letter-spacing: 2px;
+    margin: 0 0 1.5rem 0;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.social-icons a {
+    color: #aaa;
+    font-size: 1.8rem;
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: var(--accent-color);
+    transform: scale(1.2) translateY(-3px);
+}
+
+.copyright {
+    font-size: 0.8rem;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+/* 6. MODAL & MISC
+-------------------------------------------------- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: var(--accent-bg-color);
+    margin: 10% auto;
+    padding: 30px;
+    border: 1px solid var(--border-color);
+    width: 80%;
+    max-width: 700px;
+    position: relative;
+    animation: modal-fade-in 0.5s;
+}
+
+@keyframes modal-fade-in {
+    from { opacity: 0; transform: translateY(-50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.close-btn {
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-body {
+    display: flex;
+    gap: 2rem;
+}
+.modal-img {
+    flex: 1;
+    max-width: 300px;
+    object-fit: cover;
+}
+.modal-details {
+    flex: 1;
+}
+
+
+/* 7. RESPONSIVE ADJUSTMENTS
+-------------------------------------------------- */
+@media (max-width: 768px) {
+    .site-header nav {
+        display: none;
     }
-
-    if (header) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
+    .hero-content h1 {
+        font-size: 3rem;
     }
-
-    // Mobile Navigation Toggle
-    if (mobileNavToggle && mobileNavOverlay) {
-        mobileNavToggle.addEventListener('click', () => {
-            mobileNavOverlay.classList.toggle('active');
-            mobileNavToggle.classList.toggle('active'); // Optional: for animating the icon
-            document.body.classList.toggle('no-scroll'); // Prevent scrolling when overlay is open
-        });
-
-        // Close mobile nav when a link is clicked
-        mobileNavOverlay.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileNavOverlay.classList.remove('active');
-                mobileNavToggle.classList.remove('active');
-                document.body.classList.remove('no-scroll');
-            });
-        });
+    .campaign-headline {
+        font-size: 3rem;
     }
-
-
-    // --- 2. ADVANCED CURSOR LOGIC ---
-    // Only enable custom cursor for non-touch devices
-    if (!('ontouchstart' in window || navigator.maxTouchPoints)) {
-        if (!document.getElementById('custom-cursor')) { // Prevent creating duplicate cursors
-            const cursor = document.createElement('div');
-            cursor.id = 'custom-cursor';
-            const cursorDot = document.createElement('div');
-            cursorDot.className = 'cursor-dot';
-            const cursorText = document.createElement('div');
-            cursorText.className = 'cursor-text';
-            cursor.appendChild(cursorDot);
-            cursor.appendChild(cursorText);
-            document.body.appendChild(cursor);
-
-            document.addEventListener('mousemove', (e) => {
-                cursor.style.left = e.clientX + 'px';
-                cursor.style.top = e.clientY + 'px';
-            });
-
-            const interactiveElements = document.querySelectorAll('a, button, .product-card-link');
-            interactiveElements.forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    cursor.classList.add('hover-link');
-                    cursorText.innerText = 'View';
-                });
-                el.addEventListener('mouseleave', () => {
-                    cursor.classList.remove('hover-link');
-                    cursorText.innerText = '';
-                });
-            });
-
-            const magneticElements = document.querySelectorAll('button, .banner-cta, .page-number, .page-arrow, .campaign-nav button');
-            const magneticStrength = 0.4;
-            magneticElements.forEach(el => {
-                el.addEventListener('mousemove', (e) => {
-                    const rect = el.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    el.style.transform = `translate(${x * magneticStrength}px, ${y * magneticStrength}px)`;
-                });
-                el.addEventListener('mouseleave', () => {
-                    el.style.transform = 'translate(0,0)';
-                });
-            });
-        }
+    .about-content {
+        flex-direction: column;
     }
-
-
-    // --- 3. HOMEPAGE PRELOADER LOGIC ---
-    const preloader = document.getElementById('preloader');
-    const mainContent = document.getElementById('main-content');
-    if (preloader && mainContent) {
-        const initialPrompt = preloader.querySelector('#initial-prompt');
-        const typewriterContainer = preloader.querySelector('#typewriter-container');
-
-        if (initialPrompt && typewriterContainer) {
-            const startAnimation = () => {
-                initialPrompt.style.opacity = '0';
-                setTimeout(() => {
-                    initialPrompt.classList.add('hidden');
-                    typewriterContainer.classList.remove('hidden');
-                }, 300);
-                setTimeout(revealSite, 2500);
-            };
-
-            const revealSite = () => {
-                preloader.style.opacity = '0';
-                mainContent.classList.remove('hidden');
-                mainContent.classList.add('visible');
-                setTimeout(() => {
-                    preloader.style.display = 'none';
-                }, 1200);
-            };
-            preloader.addEventListener('click', startAnimation, { once: true });
-        }
+    .modal-body {
+        flex-direction: column;
     }
-
-    // --- 4. CAMPAIGN GALLERY LOGIC ---
-    const campaignSection = document.getElementById('campaign');
-    if (campaignSection) {
-        const cards = campaignSection.querySelectorAll('.campaign-card');
-        const campaignHeadline = campaignSection.querySelector('.campaign-headline');
-        const campaignNextBtn = campaignSection.querySelector('#next-btn');
-        const campaignPrevBtn = campaignSection.querySelector('#prev-btn');
-
-        if (cards.length > 0 && campaignHeadline && campaignNextBtn && campaignPrevBtn) {
-            let currentIndex = 0;
-            const showCard = (index) => {
-                if (index >= cards.length) currentIndex = 0;
-                else if (index < 0) currentIndex = cards.length - 1;
-                else currentIndex = index;
-
-                const activeCard = cards[currentIndex];
-                cards.forEach(card => card.classList.remove('active', 'prev', 'next'));
-                activeCard.classList.add('active');
-                cards[(currentIndex + 1) % cards.length].classList.add('next');
-                cards[(currentIndex - 1 + cards.length) % cards.length].classList.add('prev');
-
-                campaignHeadline.style.opacity = 0;
-                setTimeout(() => {
-                    campaignHeadline.textContent = activeCard.dataset.headline || '';
-                    campaignHeadline.style.opacity = 1;
-                }, 300);
-                campaignSection.style.backgroundColor = activeCard.dataset.color || '#000000';
-            };
-
-            campaignNextBtn.addEventListener('click', () => showCard(currentIndex + 1));
-            campaignPrevBtn.addEventListener('click', () => showCard(currentIndex - 1));
-            showCard(currentIndex);
-        }
+    .banner-content h2 {
+        font-size: 2.5rem;
     }
-
-    // --- 5. ALL MODAL & RATING LOGIC ---
-    const modal = document.getElementById('quick-look-modal');
-    if (modal) {
-        const closeModalBtn = modal.querySelector('.close-btn');
-        const modalBody = modal.querySelector('.modal-body');
-        const closeModal = () => modal.style.display = 'none';
-
-        const sampleReviews = [
-            { author: 'Alex R.', date: 'May 20, 2025', text: 'Absolutely phenomenal. The quality is insane for the price. They feel heavy and premium.' },
-            { author: 'Jess C.', date: 'May 15, 2025', text: 'These are my new favorite sunglasses, hands down. I get compliments everywhere I go.' },
-            { author: 'Sam B.', date: 'April 28, 2025', text: 'Great style and they feel really durable. The packaging was also top-notch. Impressed.' },
-        ];
-        
-        const populateRatings = () => {
-            const productLinks = document.querySelectorAll('.product-card-link');
-            productLinks.forEach(link => {
-                const ratingValue = link.dataset.rating;
-                const ratingContainer = link.querySelector('.product-rating');
-                if (ratingValue && ratingContainer) {
-                    ratingContainer.innerHTML = `<i class="fa-solid fa-star"></i> ${ratingValue}`;
-                }
-            });
-        };
-        populateRatings();
-
-        document.querySelectorAll('.quick-look-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const card = e.target.closest('.product-card');
-                const title = card.querySelector('h3').textContent;
-                const price = card.querySelector('.price').textContent;
-                const imageSrc = card.querySelector('.static-image').src;
-                modalBody.innerHTML = `
-                    <img src="${imageSrc}" alt="${title}" class="modal-img">
-                    <div class="modal-details">
-                        <h2>${title}</h2> <p class="price">${price}</p>
-                        <p>Sleek, lightweight frames with advanced UV400 protection. Crafted for the bold.</p>
-                        <button class="banner-cta">Add to Cart</button>
-                    </div>`;
-                modal.style.display = 'block';
-            });
-        });
-
-        document.querySelectorAll('.full-page-grid .product-card-link').forEach(link => {
-            link.addEventListener('click', (event) => {
-                event.preventDefault();
-                const card = link.querySelector('.product-card');
-                const title = card.querySelector('h3').textContent;
-                const price = card.querySelector('.price').textContent;
-                const imageSrc = card.querySelector('.static-image').src;
-                const description = link.dataset.description;
-                const rating = link.dataset.rating;
-                const reviewsCount = link.dataset.reviews;
-
-                let reviewsHTML = `<div class="reviews-section"><h3>REVIEWS (<i class="fa-solid fa-star"></i> ${rating} based on ${reviewsCount} ratings)</h3>`;
-                sampleReviews.slice(0, 3).forEach(review => {
-                    reviewsHTML += `<div class="review-item"><div class="review-header"><span class="review-author">${review.author}</span><span class="review-date">${review.date}</span></div><p class="review-text">${review.text}</p></div>`;
-                });
-                reviewsHTML += `</div>`;
-                
-                modalBody.innerHTML = `
-                    <img src="${imageSrc}" alt="${title}" class="modal-img">
-                    <div class="modal-details">
-                        <h2>${title}</h2><p class="price">${price}</p>
-                        <p class="product-description">${description}</p>
-                        <button class="banner-cta">Purchase</button>
-                        ${reviewsHTML}
-                    </div>`;
-                modal.style.display = 'block';
-            });
-        });
-        
-        closeModalBtn.addEventListener('click', closeModal);
-        window.addEventListener('click', (e) => {
-            if (e.target == modal) closeModal();
-        });
+    #signature-banner {
+        padding: 6rem 5%;
     }
+}
 
-    // --- 6. SCROLL-TRIGGERED BANNER ANIMATION ---
-    const bannerAnimationContainers = document.querySelectorAll('.reveal-animation-container');
-    if (bannerAnimationContainers.length > 0) {
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-lines');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.2 });
-        bannerAnimationContainers.forEach(container => observer.observe(container));
+/* === 8. PRODUCT PAGE STYLES === */
+
+/* Active State for Navigation Link */
+.site-header nav a.active-nav {
+    color: var(--accent-color);
+    text-shadow: 0 0 5px var(--accent-color);
+}
+.logo a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Page Header */
+.page-header {
+    text-align: center;
+    padding: 6rem 5% 4rem;
+    border-bottom: 1px solid var(--border-color);
+    background-color: #050505;
+}
+.page-header h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+.page-header p {
+    font-size: 1.1rem;
+    color: #aaa;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Filter Bar */
+.filter-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 5%;
+    border-bottom: 1px solid var(--border-color);
+}
+.product-count {
+    color: #aaa;
+}
+.filter-bar select {
+    background-color: var(--accent-bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 0.8rem 1rem;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    border-radius: 0; /* Keep it sharp */
+}
+
+/* Full Page Grid Adjustments */
+.full-page-grid {
+    padding-top: 4rem;
+}
+.product-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block; /* Make the link a block element */
+}
+.product-card-link .product-card:hover {
+    border-color: var(--accent-color);
+}
+.product-card-link h3, .product-card-link .price {
+    transition: color 0.3s;
+}
+.product-card-link:hover h3 {
+    color: var(--accent-color);
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 4rem 0;
+}
+.page-number, .page-arrow {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border-color);
+    color: #aaa;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+.page-number:hover, .page-arrow:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+.page-number.current {
+    background-color: var(--accent-color);
+    color: var(--main-bg-color);
+    border-color: var(--accent-color);
+    font-weight: 700;
+}
+
+/* Style for the new description text in the modal */
+.modal-details .product-description {
+    margin: 1.5rem 0;
+    line-height: 1.7;
+    color: #ccc;
+    font-size: 0.95rem;
+}
+
+/* === 9. ADVANCED CURSOR & MAGNETIC EFFECTS === */
+
+/* The main cursor element (we will create this with JS) */
+#custom-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 99999;
+    mix-blend-mode: difference; /* This creates a cool color-inverting effect */
+}
+
+/* The outer dot of the cursor */
+.cursor-dot {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease-out, width 0.2s ease-out, height 0.2s ease-out;
+}
+
+/* The text inside the cursor (e.g., "View") */
+.cursor-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: black;
+    font-size: 0.7rem;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+}
+
+
+/* --- States --- */
+
+/* State when hovering over a link or clickable element */
+#custom-cursor.hover-link .cursor-dot {
+    width: 60px;
+    height: 60px;
+}
+
+#custom-cursor.hover-link .cursor-text {
+    opacity: 1;
+}
+
+/* Add a transition to all elements that will be magnetic */
+button, .banner-cta, .page-number, .page-arrow {
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* === 10. REVIEWS & RATINGS SYSTEM STYLES === */
+
+/* On-card rating display */
+.product-card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+.product-card-bottom .price {
+    margin-bottom: 0;
+}
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ccc;
+}
+.product-rating i {
+    color: var(--accent-color);
+}
+
+
+/* Modal Reviews Section */
+.reviews-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+.reviews-section h3 {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+.review-item {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+.review-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+.review-author {
+    font-weight: 700;
+    color: #fff;
+}
+.review-date {
+    font-size: 0.8rem;
+    color: #888;
+}
+.review-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #bbb;
+}
+
+/* === 11. FINAL & CORRECTED CINEMATIC LOOKBOOK STYLES === */
+
+/* Lookbook Intro Screen */
+#lookbook-intro {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    z-index: 100000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 1s ease;
+}
+.lookbook-intro-text {
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+/* Header positioned on top of the lookbook */
+.lookbook-header {
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+}
+
+/* Main scroll-snap container */
+.lookbook-page .lookbook-container {
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    position: relative;
+    background-color: #080808;
+}
+
+/* Each full-screen slide */
+.lookbook-slide {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    scroll-snap-align: start;
+    position: relative;
+    padding: 5%;
+    overflow: hidden;
+}
+.lookbook-slide:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+/* Image & Text Containers */
+.lookbook-image-container,
+.lookbook-text-container {
+    flex-basis: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.lookbook-text-container {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0 5%;
+    gap: 1.5rem;
+}
+.lookbook-slide:nth-child(even) .lookbook-text-container {
+    align-items: flex-end;
+}
+
+/* The Image inside its container */
+.lookbook-image-container img {
+    max-width: 100%;
+    max-height: 80vh;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    border: 1px solid var(--border-color);
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+/* The Corrected Title & Description Styles */
+.lookbook-title {
+    font-size: 3rem;
+    color: var(--text-color);
+    width: 100%;
+    opacity: 0;
+    transform: scale(1.5);
+    transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+    /* FIX: Sets the default animation origin to the left for odd slides */
+    transform-origin: left center;
+}
+.lookbook-slide:nth-child(even) .lookbook-title {
+    text-align: right;
+    /* FIX: Overrides the origin for even slides */
+    transform-origin: right center;
+}
+
+.lookbook-description {
+    font-size: 1.1rem;
+    color: #aaa;
+    line-height: 1.8;
+    max-width: 450px;
+    margin-top: 1rem;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+/* JS-Triggered Animation States */
+.lookbook-slide.is-active .lookbook-image-container img {
+    opacity: 1;
+    transform: scale(1);
+}
+.lookbook-slide.is-active .lookbook-title.title-in {
+    opacity: 1;
+    transform: scale(1.5);
+}
+.lookbook-slide.is-active .lookbook-title.is-typing {
+    transform: scale(1) translateY(0);
+}
+.lookbook-slide.is-active .lookbook-description.is-typing {
+    opacity: 1;
+}
+
+/* Responsive fixes */
+@media (max-width: 900px) {
+    .lookbook-slide, .lookbook-slide:nth-child(even) {
+        flex-direction: column;
+        justify-content: center;
+        gap: 2rem;
     }
-    
-    // --- 7. CINEMATIC LOOKBOOK PAGE LOGIC ---
-    const lookbookContainer = document.querySelector('.lookbook-container');
-    if (lookbookContainer) {
-        const intro = document.getElementById('lookbook-intro');
-        const slides = document.querySelectorAll('.lookbook-slide');
-        let isTyping = false;
-
-        const typeWriter = (element, text, speed, callback) => {
-            let i = 0;
-            element.innerHTML = '';
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                } else if (callback) {
-                    callback();
-                }
-            }
-            type();
-        };
-
-        const animateSlide = (slide) => {
-            if (slide.classList.contains('is-animating')) return;
-            slide.classList.add('is-animating', 'is-active');
-            const titleEl = slide.querySelector('.lookbook-title');
-            const descEl = slide.querySelector('.lookbook-description');
-            const titleText = slide.dataset.title;
-            const descText = slide.dataset.description;
-            titleEl.textContent = '';
-            descEl.textContent = '';
-
-            setTimeout(() => {
-                titleEl.textContent = titleText;
-                titleEl.classList.add('title-in');
-            }, 500);
-
-            setTimeout(() => {
-                titleEl.classList.add('is-typing');
-                descEl.classList.add('is-typing');
-                typeWriter(descEl, descText, 20, () => {
-                    slide.classList.remove('is-animating');
-                });
-            }, 1800);
-        };
-
-        const resetSlide = (slide) => {
-            slide.classList.remove('is-active', 'is-animating');
-            const titleEl = slide.querySelector('.lookbook-title');
-            const descEl = slide.querySelector('.lookbook-description');
-            titleEl.classList.remove('title-in', 'is-typing');
-            descEl.classList.remove('is-typing');
-            descEl.textContent = '';
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateSlide(entry.target);
-                } else {
-                    resetSlide(entry.target);
-                }
-            });
-        }, { threshold: 0.7 });
-
-        window.onload = () => {
-            slides.forEach(slide => {
-                observer.observe(slide);
-            });
-            if (intro) {
-                intro.addEventListener('click', () => {
-                    intro.style.opacity = '0';
-                    setTimeout(() => {
-                        intro.style.display = 'none';
-                    }, 1000);
-                }, { once: true });
-            }
-        };
+    .lookbook-text-container, .lookbook-slide:nth-child(even) .lookbook-text-container {
+        align-items: center;
+        text-align: center;
     }
+    .lookbook-image-container img { max-width: 85vw; max-height: 50vh; }
+    .lookbook-title { font-size: 2rem; }
+    .lookbook-slide:nth-child(even) .lookbook-title { text-align: center; transform-origin: center center; }
+}
+/* === 12. CUSTOM SCROLLBAR STYLES === */
 
-});
+/* For Webkit-based browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--accent-bg-color);
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--accent-color);
+    border-radius: 10px;
+    border: 2px solid var(--accent-bg-color);
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #ffff8a; /* A brighter yellow on hover */
+}
+
+/* For Firefox */
+.lookbook-container {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color) var(--accent-bg-color);
+}
+
+/* === 13. SCROLL DOWN CUE STYLES === */
+
+.scroll-down-cue {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 24px;
+    z-index: 10;
+    opacity: 0.7;
+    transition: opacity 0.5s ease;
+}
+
+/* Create the chevron shape using borders */
+.scroll-down-cue::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border: 0px solid white;
+    border-bottom-width: 3px;
+    border-right-width: 3px;
+    transform: rotate(45deg);
+}
+
+/* The bouncing animation */
+.scroll-down-cue {
+    animation: bounce 2s infinite ease-in-out;
+}
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    40% {
+        transform: translateX(-50%) translateY(-15px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+/* This class will be added by JS to hide the cue after scrolling */
+.scroll-down-cue.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
